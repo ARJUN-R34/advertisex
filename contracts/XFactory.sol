@@ -45,7 +45,7 @@ contract XFactory {
     // TODO - walletaddress => pooladdress
     mapping (address => address) public getAdvertisersCompany;
 
-    // mapping to store the advertiser's child contract against advertiser details
+    // mapping to store the advertiser's child contract (pool) against advertiser details
     mapping (address => AdvertiserDetails) public advertiserContract;
     // mapping to store the advertiser's wallet address against advertiser details
     mapping (address => AdvertiserDetails) public advertiserData;       // make it private
@@ -67,15 +67,15 @@ contract XFactory {
     }
 
     // function to deploy the advertiser contract
-    function deployAdvertiserContract(string calldata _name, string calldata _websiteUrl, address _walletAddress, uint8 _priorityPercentage, uint256 _poolCapital, bool _isNsfw, string calldata _content, uint256 _minimumTransaction, string[] calldata listOfIntegrators) external returns (address) {
+    function deployAdvertiserContract(string calldata _name, string calldata _websiteUrl, address _walletAddress, uint8 _priorityPercentage, uint256 _poolCapital, string calldata _content, uint256 _minimumTransaction, string[] memory listOfIntegrators) external returns (address) {
         advertiserData[_walletAddress].name = _name;
         advertiserData[_walletAddress].websiteUrl = _websiteUrl;
         advertiserData[_walletAddress].walletAddress = _walletAddress;
         advertiserData[_walletAddress].priorityPercentage = _priorityPercentage;
         advertiserData[_walletAddress].poolCapital = _poolCapital;
-        advertiserData[_walletAddress].isNsfw = _isNsfw;
         advertiserData[_walletAddress].content = _content;
         advertiserData[_walletAddress].minimumTransaction = _minimumTransaction;
+        // add for NSFW
 
         XChild xchildContract = new XChild(msg.sender);
 
@@ -120,8 +120,9 @@ contract XFactory {
         return _integrators;
     }
 
-    // function getAdDetails(string calldata walletName) isCallerInfra(msg.sender) external view {
-    //     integratorData[name]
-    // }
+    function getAdDetails(string calldata walletName) isCallerInfra(msg.sender) external view returns(string memory){
+        address poolAddress = listOfPoolsOfIntegrator[walletName][0];
+        return advertiserContract[poolAddress].content;
+    }
 
 }

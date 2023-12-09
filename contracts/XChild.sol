@@ -13,10 +13,8 @@ contract XChild {
     // contract address of the AdS Wallet
     address private immutable AdSWallet = 0x71296b2ACbFDd24dD1dd089cdAe8708BfD8cB738;
     // contract address of the paymaster wallet
+    // create our own paymaster
     address private immutable paymasterAddress = 0x00000f79B7FaF42EEBAdbA19aCc07cD08Af44789;
-
-    // array to store the list of all pools
-    address[] public pools;
 
     // constructor to store the infra contract address
     constructor(address deployer) {
